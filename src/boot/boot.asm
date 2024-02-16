@@ -25,7 +25,8 @@ step2:
 	mov eax,cr0
 	or eax,0x1
 	mov cr0,eax
-	jmp CODE_SEG:load32
+	;jmp CODE_SEG:load32
+	jmp $
 ;GDT
 gdt_start:
 
@@ -48,13 +49,13 @@ gdt_data: ; DS,ES,SS,FS,GS
 	db 0x92   ; access byte
 	db 11001111b ; high 4 bits flags and thw low 4 bit flags
 	db 0      ; base 24-31 bits
+
 gdt_end:
 	
 gdt_descriptor:
 	dw gdt_end - gdt_start - 1
 	dd gdt_start 
 [BITS 32]
-
 load32:
 	mov ax,DATA_SEG
 	mov ds,ax
@@ -70,7 +71,6 @@ load32:
 	or al,2 
 	out 0x92,al
 	jmp $
-error_message: db "Failed to load sector",0
 times 510 - ($-$$) db 0
 dw 0xAA55
 
